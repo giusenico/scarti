@@ -1,0 +1,63 @@
+{
+  "slug": "2026-w16-sample",
+  "week_of": "2026-04-13",
+  "generated_at": "2026-04-18T07:30:00Z",
+  "anomalies": [
+    {
+      "series_id": "istat.industrial_production.index",
+      "period": "2026-02",
+      "value": 98.2,
+      "method": "mod_zscore_stl",
+      "zscore": -2.8,
+      "baseline_center": 0.0,
+      "baseline_scale": 0.9,
+      "severity": "strong",
+      "direction": "down",
+      "mom_change_pct": -2.1,
+      "yoy_change_pct": -3.7,
+      "yoy_percentile": 82
+    },
+    {
+      "series_id": "istat.ipc.nic.general",
+      "period": "2026-03",
+      "value": 101.6,
+      "method": "mod_zscore_stl",
+      "zscore": 2.1,
+      "baseline_center": 0.1,
+      "baseline_scale": 0.2,
+      "severity": "moderate",
+      "direction": "up",
+      "mom_change_pct": 0.5,
+      "yoy_change_pct": 1.8,
+      "yoy_percentile": 63
+    }
+  ],
+  "it": {
+    "headline": "Produzione industriale in forte calo a febbraio, prezzi al consumo accelerano a marzo",
+    "lede": "L'indice della produzione industriale è sceso a 98,2 a febbraio, il valore più basso dall'autunno 2023. A marzo l'inflazione mostra un'accelerazione marginale, coerente con i segnali dell'area euro.",
+    "sections": [
+      {
+        "anomaly_index": 0,
+        "body": "La produzione industriale italiana ha toccato a febbraio 2026 il livello di 98,2 (indice 2021=100), in calo del 2,1% rispetto a gennaio e del 3,7% sullo stesso mese dell'anno precedente.\n\nÈ il movimento mensile più marcato dal 2023: variazioni di questa intensità si sono osservate, nella serie degli ultimi cinque anni, solo in corrispondenza degli shock energetici del 2022. La flessione è diffusa: l'analisi per comparti pubblicata da ISTAT indica contrazioni in beni intermedi, di consumo durevoli e strumentali.\n\nIl dato conferma la traiettoria già visibile nelle rilevazioni di fine 2025 sulla fiducia delle imprese manifatturiere, e andrà letto nel contesto dei nuovi dati di aprile attesi per metà giugno."
+      },
+      {
+        "anomaly_index": 1,
+        "body": "L'indice dei prezzi al consumo per l'intera collettività nazionale (NIC) si è attestato a 101,6 a marzo, con un aumento dello 0,5% rispetto a febbraio e dell'1,8% tendenziale.\n\nLa variazione mensile si colloca appena oltre la normale oscillazione stagionale di marzo, che storicamente vede un lieve rimbalzo dopo i saldi di gennaio-febbraio. Il segnale, moderato, è comunque il più marcato della serie ricostruita dopo la rebasing del 2026.\n\nFonte: ISTAT — indagine mensile sui prezzi al consumo (NIC)."
+      }
+    ]
+  },
+  "en": {
+    "headline": "Industrial production drops sharply in February, consumer prices tick up in March",
+    "lede": "Italy's industrial production fell to 98.2 in February, the lowest reading since late 2023. March saw a modest acceleration in consumer prices, in line with broader euro-area signals.",
+    "sections": [
+      {
+        "anomaly_index": 0,
+        "body": "Italian industrial production fell to 98.2 in February 2026 (index 2021=100), down 2.1% month-on-month and 3.7% on the same month a year earlier.\n\nThis is the sharpest monthly move since 2023: drops of comparable magnitude over the past five years were seen only in the aftermath of the 2022 energy shocks. The decline is broad-based: ISTAT's sectoral breakdown shows contractions across intermediate, durable consumer, and capital goods.\n\nThe reading reinforces the trajectory already visible in late-2025 manufacturing confidence data, and will need to be read alongside the April figures due in mid-June."
+      },
+      {
+        "anomaly_index": 1,
+        "body": "The consumer price index for the whole national community (NIC) rose to 101.6 in March, up 0.5% from February and 1.8% year-on-year.\n\nThe monthly change sits just above the usual seasonal pattern for March, which historically sees a mild rebound after the January-February sales period. The signal is moderate but still the sharpest in the rebased series since the 2026 reference-year switch.\n\nSource: ISTAT — monthly consumer price survey (NIC)."
+      }
+    ]
+  }
+}

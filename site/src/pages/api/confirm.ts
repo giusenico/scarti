@@ -9,7 +9,7 @@ export const GET: APIRoute = async ({ url }) => {
     return new Response("Missing token", { status: 400 });
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await supabase()
     .from("subscribers")
     .update({ confirmed_at: new Date().toISOString() })
     .eq("confirm_token", token)

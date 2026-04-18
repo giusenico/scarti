@@ -1,13 +1,15 @@
 import { Resend } from "resend";
 
-const key = import.meta.env.RESEND_API_KEY;
-const fromAddress = import.meta.env.SCARTI_FROM_EMAIL || "Scarti <newsletter@scarti.example>";
-
-if (!key) {
-  throw new Error("RESEND_API_KEY must be set");
+let _resend: Resend | null = null;
+function resend(): Resend {
+  if (_resend) return _resend;
+  const key = import.meta.env.RESEND_API_KEY;
+  if (!key) throw new Error("RESEND_API_KEY must be set");
+  _resend = new Resend(key);
+  return _resend;
 }
-
-export const resend = new Resend(key);
+const fromAddress = () =>
+  import.meta.env.SCARTI_FROM_EMAIL || "Scarti <newsletter@scarti.example>";
 
 export async function sendConfirmationEmail(
   email: string,
@@ -27,5 +29,5 @@ export async function sendConfirmationEmail(
           html: `<p>Hi,</p><p>to complete your subscription to the <strong>Scarti</strong> weekly newsletter, click the link below.</p><p><a href="${confirmUrl}">${confirmUrl}</a></p><p style="color:#888;font-size:13px">If this wasn't you, please ignore this email.</p>`,
         };
 
-  await resend.emails.send({ from: fromAddress, to: email, subject, text, html });
+  await resend().emails.send({ from: fromAddress(), to: email, subject, text, html });
 }

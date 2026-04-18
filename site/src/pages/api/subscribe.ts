@@ -38,7 +38,7 @@ export const POST: APIRoute = async ({ request, url }) => {
 
   // Upsert: if the email already exists we refresh the token and re-send,
   // instead of leaking that the address is already known.
-  const { data, error } = await supabase
+  const { data, error } = await supabase()
     .from("subscribers")
     .upsert({ email, locale }, { onConflict: "email" })
     .select("confirm_token")

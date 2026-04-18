@@ -9,7 +9,7 @@ export const GET: APIRoute = async ({ url }) => {
     return new Response("Missing token", { status: 400 });
   }
 
-  const { error } = await supabase
+  const { error } = await supabase()
     .from("subscribers")
     .delete()
     .eq("unsub_token", token);
