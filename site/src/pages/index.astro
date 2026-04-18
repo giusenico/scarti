@@ -1,0 +1,22 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import ReportList from "~/components/ReportList.astro";
+import { getCollection } from "astro:content";
+import { t } from "~/i18n/strings";
+
+const reports = (await getCollection("reports")).sort(
+  (a, b) => b.data.week_of.localeCompare(a.data.week_of),
+);
+const s = t("it");
+---
+<BaseLayout title={`${s.site_title} — ${s.site_tagline}`} locale="it">
+  <h1>{s.site_tagline}</h1>
+  <p class="report-lede">
+    Ogni lunedì Scarti setaccia le ultime serie pubblicate da ISTAT e Banca
+    d'Italia e racconta solo quelle che si sono mosse in modo statisticamente
+    anomalo — senza enfasi, con contesto, con le fonti.
+  </p>
+
+  <h2>{s.latest_reports}</h2>
+  <ReportList reports={reports.slice(0, 12)} locale="it" />
+</BaseLayout>

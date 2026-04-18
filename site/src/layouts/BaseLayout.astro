@@ -1,0 +1,45 @@
+---
+import "~/styles/global.css";
+import { type Locale, t, localePath, otherLocale } from "~/i18n/strings";
+
+interface Props {
+  title: string;
+  description?: string;
+  locale: Locale;
+}
+
+const { title, description, locale } = Astro.props;
+const s = t(locale);
+const other = otherLocale(locale);
+const currentPath = Astro.url.pathname;
+---
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description ?? s.site_tagline} />
+    <link rel="alternate" hreflang="it" href={`/${currentPath.replace(/^\/en/, "")}`} />
+    <link rel="alternate" hreflang="en" href={currentPath.startsWith("/en") ? currentPath : `/en${currentPath}`} />
+    <link rel="icon" href="/favicon.svg" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href={localePath(locale, "/")} class="site-title">{s.site_title}</a>
+      <nav class="site-nav">
+        <a href={localePath(locale, "/archivio")}>{s.archive}</a>
+        <a href={localePath(locale, "/metodo")}>{s.method}</a>
+        <a href={localePath(locale, "/iscriviti")}>{s.subscribe}</a>
+        <a href={localePath(other, currentPath.replace(/^\/en/, "") || "/")}>{s.view_english}</a>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <span>{s.site_title} · {s.site_tagline.toLowerCase()}</span>
+      <span>{s.footer_rights}</span>
+    </footer>
+  </body>
+</html>

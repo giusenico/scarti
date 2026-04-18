@@ -1,0 +1,73 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import AnomalyTag from "~/components/AnomalyTag.astro";
+import AnomalyChart from "~/components/charts/AnomalyChart";
+import Markdown from "~/components/Markdown.astro";
+import { loadChartsForReport, reportBody } from "~/lib/report";
+import { t } from "~/i18n/strings";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const reports = await getCollection("reports");
+  return reports.map((r) => ({ params: { slug: r.data.slug } }));
+}
+
+const { slug } = Astro.params;
+const entry = await getEntry("reports", slug!);
+if (!entry) return Astro.redirect("/en/404");
+
+const charts = await loadChartsForReport(entry.data.slug);
+const body = reportBody(entry, "en");
+const s = t("en");
+
+const weekFormatted = new Date(entry.data.week_of).toLocaleDateString("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+<BaseLayout title={`${body.headline} — ${s.site_title}`} description={body.lede} locale="en">
+  <h1>{body.headline}</h1>
+  <div class="report-meta">
+    <span>{s.week_of} {weekFormatted}</span>
+    <span>·</span>
+    <span>{s.anomalies_found(entry.data.anomalies.length)}</span>
+    <span>·</span>
+    <span>{s.read_time}</span>
+  </div>
+
+  <p class="report-lede">{body.lede}</p>
+
+  {body.sections.map((section) => {
+    const a = entry.data.anomalies[section.anomaly_index];
+    if (!a) return null;
+    const chart = charts[a.series_id];
+    return (
+      <section>
+        <h2>
+          <AnomalyTag severity={a.severity} direction={a.direction} locale="en" />
+          {" "}
+          {chart?.title_en ?? a.series_id}
+        </h2>
+        {chart && (
+          <div class="chart-wrap">
+            <AnomalyChart
+              client:visible
+              data={chart.history}
+              anomalyPeriod={a.period}
+              unit={chart.unit}
+              title={chart.title_en}
+              locale="en"
+            />
+            <p class="chart-caption">
+              {chart.title_en} · {chart.unit} · {s.source}: {a.series_id.split(".")[0] === "istat" ? "ISTAT" : "Bank of Italy"}
+            </p>
+          </div>
+        )}
+        <Markdown text={section.body} />
+      </section>
+    );
+  })}
+</BaseLayout>

@@ -1,0 +1,15 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import ReportList from "~/components/ReportList.astro";
+import { getCollection } from "astro:content";
+import { t } from "~/i18n/strings";
+
+const reports = (await getCollection("reports")).sort(
+  (a, b) => b.data.week_of.localeCompare(a.data.week_of),
+);
+const s = t("en");
+---
+<BaseLayout title={`${s.archive} — ${s.site_title}`} locale="en">
+  <h1>{s.archive}</h1>
+  <ReportList reports={reports} locale="en" />
+</BaseLayout>

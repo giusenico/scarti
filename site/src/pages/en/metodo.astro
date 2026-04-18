@@ -1,0 +1,47 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+---
+<BaseLayout title="Method — Scarti" locale="en">
+  <h1>Method</h1>
+  <p class="report-lede">
+    How Scarti decides whether a data point is unusual enough to warrant a report.
+  </p>
+
+  <h2>What we watch</h2>
+  <p>
+    Every Monday the pipeline pulls the last 60 months of the series listed in
+    the repository catalog: prices, labour, production, confidence, credit. All sources are public and reached via official APIs —
+    ISTAT, Bank of Italy, occasionally Eurostat.
+  </p>
+
+  <h2>How we detect anomalies</h2>
+  <p>
+    First we strip out seasonality (December always has more retail sales,
+    August more tourists): if the source already publishes a seasonally
+    adjusted version we use it, otherwise we apply an STL decomposition.
+    On what remains — the residual — we compute where the last value sits
+    against the median and the median absolute deviation (MAD) of the past
+    five years.
+  </p>
+  <p>
+    This is a robust ruler: an isolated past shock (think 2020 lockdowns)
+    doesn't distort the scale. We flag a data point only when it sits more
+    than two median deviations from typical — a bar you'd expect to cross
+    by chance roughly once every two years if the series were actually flat.
+  </p>
+
+  <h2>What we don't do</h2>
+  <ul>
+    <li>We don't invent causal stories. A series that moves doesn't tell us
+        <em>why</em> — only that it moved.</li>
+    <li>We don't offer political or forward-looking economic judgements.</li>
+    <li>We don't store or redistribute raw data: each week the pipeline
+        re-fetches everything from the official source.</li>
+  </ul>
+
+  <h2>Transparency</h2>
+  <p>
+    The code is open source. Each report cites the SDMX dataflow of the
+    monitored series so the detection can be reproduced.
+  </p>
+</BaseLayout>

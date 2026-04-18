@@ -1,0 +1,213 @@
+# Catalogo delle serie monitorate da Scarti.
+#
+# Campi SDMX verificati con chiamate live all'API ISTAT il 2026-04-18.
+# Per verificare manualmente: `scarti fetch <series_id>`.
+#
+# Direction_good: "up" = aumento è notizia positiva; "down" = aumento è negativo;
+# "neutral" = nessuna polarità. Usato dalla narrativa, non dalla detection.
+
+version: 1
+
+series:
+
+  # ============ PREZZI ============
+  - id: istat.ipc.nic.general
+    source: istat
+    title_it: Prezzi al consumo — indice generale (CPI)
+    title_en: Consumer price index — all items
+    category: prezzi
+    unit: "indice"
+    frequency: M
+    seasonally_adjusted: false
+    direction_good: down
+    sdmx_dataflow: "CPI"
+    sdmx_key: CPI.IT.PCPI_IX._Z.M
+    source_url: https://esploradati.istat.it/databrowser/
+
+  - id: istat.ppi.industrial
+    source: istat
+    title_it: Prezzi alla produzione industriale — totale
+    title_en: Industrial producer prices — total
+    category: prezzi
+    unit: "indice 2021=100"
+    frequency: M
+    seasonally_adjusted: false
+    direction_good: down
+    sdmx_dataflow: "145_360_DF_DCSC_PREZZPIND_1_4"
+    sdmx_key: M.IT.IND_PRIC_2021.N.T.0020
+    source_url: https://esploradati.istat.it/databrowser/
+
+  # ============ PRODUZIONE ============
+  - id: istat.industrial_production.index
+    source: istat
+    title_it: Produzione industriale — indice (destagionalizzato)
+    title_en: Industrial production index (seasonally adjusted)
+    category: produzione
+    unit: "indice 2021=100"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: "115_333_DF_DCSC_INDXPRODIND_1_6"
+    sdmx_key: M.IT.IND_PROD_21.Y.0020
+    source_url: https://esploradati.istat.it/databrowser/
+
+  - id: istat.retail_sales.volume
+    source: istat
+    title_it: Commercio al dettaglio — valore (destagionalizzato)
+    title_en: Retail trade — value (seasonally adjusted)
+    category: consumi
+    unit: "indice 2021=100"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: "120_337_DF_DCSC_COMMDET_1_12"
+    sdmx_key: M.IT.RTD_TURN_VAL_21.Y.99.9.TOTAL
+    source_url: https://esploradati.istat.it/databrowser/
+
+  - id: istat.construction_production.index
+    source: istat
+    title_it: Produzione nelle costruzioni — indice (destagionalizzato)
+    title_en: Construction production index (seasonally adjusted)
+    category: produzione
+    unit: "indice 2021=100"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: "115_362_DF_DCSC_INDXPRODCOSTR_1_4"
+    sdmx_key: M.IT.CONS_PROD_21.Y.F
+    source_url: https://esploradati.istat.it/databrowser/
+
+  # ============ LAVORO ============
+  # Attenzione: i dataflow lavoro hanno una dimensione EDITION (data pubblicazione)
+  # che cambia ogni mese. La chiave qui punta alla release di ottobre 2025;
+  # aggiornare periodicamente, oppure estendere il client per scegliere
+  # automaticamente l'EDITION più recente.
+  - id: istat.unemployment.total
+    source: istat
+    title_it: Tasso di disoccupazione — totale 15-74 (destagionalizzato)
+    title_en: Unemployment rate — total 15-74 (seasonally adjusted)
+    category: lavoro
+    unit: "%"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: down
+    sdmx_dataflow: "151_874_DF_DCCV_TAXDISOCCUMENS1_1"
+    sdmx_key: M.IT.UNEM_R.Y.9.Y15-74.2025M10G2
+    source_url: https://esploradati.istat.it/databrowser/
+
+  - id: istat.employment.rate
+    source: istat
+    title_it: Tasso di occupazione — totale 15-64 (destagionalizzato)
+    title_en: Employment rate — total 15-64 (seasonally adjusted)
+    category: lavoro
+    unit: "%"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: "150_872_DF_DCCV_TAXOCCUMENS1_1"
+    sdmx_key: M.IT.EMP_R.Y.9.Y15-64.2025M10G2
+    source_url: https://esploradati.istat.it/databrowser/
+
+  # ============ MACRO TRIMESTRALI ============
+  # GDP: anche qui EDITION è richiesto — aggiornare periodicamente.
+  - id: istat.gdp.real
+    source: istat
+    title_it: PIL trimestrale — prezzi concatenati, destagionalizzato
+    title_en: Quarterly GDP — chain-linked prices, seasonally adjusted
+    category: macro
+    unit: "mln €"
+    frequency: Q
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: "163_184_DF_DCCN_PILQ_1"
+    sdmx_key: Q.IT.B1GQ_B_W2_S1.L_2020.Y.2026M3
+    source_url: https://esploradati.istat.it/databrowser/
+
+  # ============ SERIE DA VERIFICARE MANUALMENTE ============
+  # Dataflow trovati via discovery, chiavi ancora da costruire.
+  # Usare `scarti discover --source istat --query <term>` + databrowser per
+  # identificare i codici delle dimensioni.
+
+  - id: istat.ipc.ipca.core
+    source: istat
+    title_it: Prezzi al consumo IPCA — componente di fondo
+    title_en: HICP — core inflation
+    category: prezzi
+    unit: "indice"
+    frequency: M
+    seasonally_adjusted: false
+    direction_good: down
+    sdmx_dataflow: "168_2_DF_DCSP_IPCA1_2"
+    sdmx_key: TODO
+    source_url: https://esploradati.istat.it/databrowser/
+
+  - id: istat.confidence.consumers
+    source: istat
+    title_it: Clima di fiducia dei consumatori
+    title_en: Consumer confidence climate
+    category: fiducia
+    unit: "indice 2010=100"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: "30_264"
+    sdmx_key: TODO
+    source_url: https://esploradati.istat.it/databrowser/
+
+  - id: istat.confidence.manufacturing
+    source: istat
+    title_it: Fiducia delle imprese manifatturiere
+    title_en: Manufacturing business confidence
+    category: fiducia
+    unit: "indice 2010=100"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: "111_263"
+    sdmx_key: TODO
+    source_url: https://esploradati.istat.it/databrowser/
+
+  # ============ BANCA D'ITALIA ============
+  # Endpoint SDMX BdI non ancora confermato — SCARTI_BANKIT_BASE_URL env var
+  # deve essere configurata prima di usare queste serie. Vedi .env.example.
+  # Dataflow ID da ispezionare con `scarti discover --source bankit --query ...`
+  # una volta impostato il base URL corretto.
+
+  - id: bankit.rates.mortgages.new
+    source: bankit
+    title_it: Tassi sui mutui alle famiglie — nuove operazioni
+    title_en: New mortgage rates to households
+    category: credito
+    unit: "%"
+    frequency: M
+    seasonally_adjusted: false
+    direction_good: neutral
+    sdmx_dataflow: TODO
+    sdmx_key: TODO
+    source_url: https://www.bancaditalia.it/statistiche/
+
+  - id: bankit.loans.households.stock
+    source: bankit
+    title_it: Prestiti alle famiglie — stock
+    title_en: Loans to households — stock
+    category: credito
+    unit: "mln €"
+    frequency: M
+    seasonally_adjusted: true
+    direction_good: up
+    sdmx_dataflow: TODO
+    sdmx_key: TODO
+    source_url: https://www.bancaditalia.it/statistiche/
+
+  - id: bankit.npl.ratio
+    source: bankit
+    title_it: Crediti deteriorati — quota sul totale
+    title_en: Non-performing loans ratio
+    category: credito
+    unit: "%"
+    frequency: M
+    seasonally_adjusted: false
+    direction_good: down
+    sdmx_dataflow: TODO
+    sdmx_key: TODO
+    source_url: https://www.bancaditalia.it/statistiche/

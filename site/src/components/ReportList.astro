@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { type Locale, t, localePath } from "~/i18n/strings";
+
+interface Props {
+  reports: CollectionEntry<"reports">[];
+  locale: Locale;
+}
+const { reports, locale } = Astro.props;
+const s = t(locale);
+
+function fmtDate(iso: string): string {
+  const d = new Date(iso);
+  return d.toLocaleDateString(locale === "it" ? "it-IT" : "en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+---
+<ul class="report-list">
+  {reports.map((r) => {
+    const body = locale === "it" ? r.data.it : r.data.en;
+    return (
+      <li>
+        <a href={localePath(locale, `/report/${r.data.slug}`)}>
+          <h3>{body.headline}</h3>
+          <div class="when">
+            {s.week_of} {fmtDate(r.data.week_of)} · {s.anomalies_found(r.data.anomalies.length)}
+          </div>
+        </a>
+      </li>
+    );
+  })}
+</ul>

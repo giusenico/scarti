@@ -1,0 +1,47 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+---
+<BaseLayout title="Metodo — Scarti" locale="it">
+  <h1>Metodo</h1>
+  <p class="report-lede">
+    Come Scarti decide se un dato è abbastanza strano da finire in un report.
+  </p>
+
+  <h2>Cosa guardiamo</h2>
+  <p>
+    Ogni lunedì la pipeline scarica gli ultimi 60 mesi delle serie elencate nel
+    catalogo del repository: prezzi, lavoro, produzione, fiducia, credito. Le fonti sono esclusivamente pubbliche e raggiungibili
+    via API ufficiale — ISTAT, Banca d'Italia, occasionalmente Eurostat.
+  </p>
+
+  <h2>Come rileviamo le anomalie</h2>
+  <p>
+    Prima togliamo la stagionalità (dicembre ha sempre più vendite, agosto
+    più turisti): se la serie è disponibile già destagionalizzata usiamo quella,
+    altrimenti applichiamo una decomposizione STL. Di quello che resta — il
+    residuo — calcoliamo la posizione dell'ultimo valore rispetto alla
+    mediana e alla deviazione assoluta mediana (MAD) degli ultimi 5 anni.
+  </p>
+  <p>
+    È un indicatore robusto: uno shock isolato nel passato (pensate ai lockdown
+    del 2020) non deforma il metro di giudizio. Segnaliamo un dato solo quando
+    si trova a più di due deviazioni mediane dal tipico — un livello che
+    osservereste per caso circa una volta ogni due anni se la serie fosse
+    davvero piatta.
+  </p>
+
+  <h2>Cosa non facciamo</h2>
+  <ul>
+    <li>Non inventiamo spiegazioni causali. Una serie che si muove non ci dice
+        <em>perché</em> — solo che si è mossa.</li>
+    <li>Non esprimiamo valutazioni politiche né economiche prospettiche.</li>
+    <li>Non salviamo né ridistribuiamo i dati grezzi: ogni settimana la pipeline
+        ri-scarica tutto dalla fonte ufficiale.</li>
+  </ul>
+
+  <h2>Trasparenza</h2>
+  <p>
+    Il codice è open source. Ogni report cita il dataflow SDMX della serie
+    monitorata così da poter replicare la rilevazione.
+  </p>
+</BaseLayout>

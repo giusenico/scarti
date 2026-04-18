@@ -1,0 +1,55 @@
+name: Weekly pipeline
+
+on:
+  schedule:
+    # Mondays 05:00 UTC = 07:00 Europe/Rome (summer) / 06:00 (winter).
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write   # needed to commit the generated report files
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: pipeline
+
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+      SCARTI_SITE_URL: ${{ vars.SCARTI_SITE_URL }}
+      SCARTI_FROM_EMAIL: ${{ vars.SCARTI_FROM_EMAIL }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install pipeline
+        run: pip install -e ".[detect,narrate,mail,subscribers]"
+
+      - name: Run weekly pipeline
+        run: scarti run --send-mail
+
+      - name: Commit generated report
+        run: |
+          git config user.name "scarti-bot"
+          git config user.email "bot@scarti.example"
+          if [ -n "$(git status --porcelain ../site/src/content/reports ../site/src/data/series)" ]; then
+            git add ../site/src/content/reports ../site/src/data/series
+            git commit -m "report: weekly $(date -u +%Y-%m-%d)"
+            git push
+          else
+            echo "No new report files — nothing to commit."
+          fi
+        working-directory: pipeline
+
+  # The push above triggers Vercel's Git integration and the site redeploys.
+  # No separate deploy job is needed.

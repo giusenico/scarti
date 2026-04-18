@@ -1,0 +1,26 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import { t } from "~/i18n/strings";
+
+const s = t("en");
+const confirmed = Astro.url.searchParams.get("confirmed") === "1";
+---
+<BaseLayout title={`${s.subscribe} — ${s.site_title}`} locale="en">
+  <h1>{s.subscribe_headline}</h1>
+  <p class="report-lede">{s.subscribe_blurb}</p>
+
+  {confirmed ? (
+    <p><strong>Subscription confirmed.</strong> See you Monday morning.</p>
+  ) : (
+    <form class="subscribe-form" method="post" action="/api/subscribe">
+      <input type="email" name="email" placeholder={s.subscribe_placeholder} required aria-label={s.subscribe_placeholder} />
+      <input type="hidden" name="locale" value="en" />
+      <button type="submit">{s.subscribe_cta}</button>
+    </form>
+  )}
+
+  <p style="font-size:0.9rem; color: var(--fg-muted); margin-top: 2rem">
+    No trackers, no marketing. You'll only get the weekly email with the link
+    to the report. One-click unsubscribe at the bottom of every email.
+  </p>
+</BaseLayout>

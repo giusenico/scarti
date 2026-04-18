@@ -1,0 +1,22 @@
+---
+import BaseLayout from "~/layouts/BaseLayout.astro";
+import ReportList from "~/components/ReportList.astro";
+import { getCollection } from "astro:content";
+import { t } from "~/i18n/strings";
+
+const reports = (await getCollection("reports")).sort(
+  (a, b) => b.data.week_of.localeCompare(a.data.week_of),
+);
+const s = t("en");
+---
+<BaseLayout title={`${s.site_title} — ${s.site_tagline}`} locale="en">
+  <h1>{s.site_tagline}</h1>
+  <p class="report-lede">
+    Every Monday, Scarti sifts through the latest series from ISTAT and the
+    Bank of Italy and only covers those that moved in a statistically unusual
+    way — no hype, with context, with sources.
+  </p>
+
+  <h2>{s.latest_reports}</h2>
+  <ReportList reports={reports.slice(0, 12)} locale="en" />
+</BaseLayout>

@@ -1,0 +1,31 @@
+---
+interface Props {
+  text: string;
+}
+const { text } = Astro.props;
+
+// Minimal safe-ish markdown: paragraphs + bold + italic + links.
+// The narrative from Claude is trusted (we generate it), so we don't need
+// a full markdown engine here — keeps the bundle tiny.
+function render(md: string): string {
+  const esc = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  return md
+    .split(/\n\n+/)
+    .map((para) => {
+      let p = esc(para.trim());
+      p = p.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      p = p.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+      p = p.replace(
+        /\[([^\]]+)\]\(([^)]+)\)/g,
+        '<a href="$2" rel="noopener">$1</a>',
+      );
+      return `<p>${p}</p>`;
+    })
+    .join("\n");
+}
+
+const html = render(text);
+---
+<div set:html={html} />

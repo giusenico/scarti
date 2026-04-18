@@ -1,0 +1,16 @@
+---
+import { type Locale, t } from "~/i18n/strings";
+
+interface Props {
+  severity: "moderate" | "strong" | "extreme";
+  direction: "up" | "down";
+  locale: Locale;
+}
+
+const { severity, direction, locale } = Astro.props;
+const s = t(locale);
+const arrow = direction === "up" ? "↑" : "↓";
+---
+<span class:list={["anomaly-tag", direction]}>
+  {arrow} {s.severity[severity]} · {s.direction[direction]}
+</span>
